@@ -13,31 +13,58 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.25/"></script>
 
-  <script>  
- require(["esri/config",
-  "esri/Map",
-   "esri/views/MapView"],
-    function(esriConfig, Map, MapView) { 
-      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEgdsxN_WfCGs2RqOrNfQW8VulJDY0K9jA0e0QITBUrY6ze4iDm7gGrfnir2Ri5GHwWzw-WqgzUMlQ-Q9B0fa0lpK0zbqoc2sktDyFVJfcEI6nPQn1EnBLvQZAKKvogpUvf9uM-v-c9Ov6xOB18dTpZFTVu-TYgfxLZT3XeGw3kBB2a2F7bO9FIIDUWl8F4ddrvfZVaoA5a5DNk-s3FZKxCTQU90Oj9gImN0eqJvrLprAT1_eMwue8gT"
-      const map = new Map({
-        basemap: "streets" // Basemap layer service
+
+  <script>
+    window.onload = function() {
+      require([
+        "esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/widgets/BasemapGallery"
+      ], function(esriConfig, Map, MapView, BasemapGallery) {
+        esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEgdsxN_WfCGs2RqOrNfQW8VulJDY0K9jA0e0QITBUrY6ze4iDm7gGrfnir2Ri5GHwWzw-WqgzUMlQ-Q9B0fa0lpK0zbqoc2sktDyFVJfcEI6nPQn1EnBLvQZAKKvogpUvf9uM-v-c9Ov6xOB18dTpZFTVu-TYgfxLZT3XeGw3kBB2a2F7bO9FIIDUWl8F4ddrvfZVaoA5a5DNk-s3FZKxCTQU90Oj9gImN0eqJvrLprAT1_eMwue8gT";
+        const map = new Map({
+          basemap: "arcgis-nova" // Basemap layer service
+        });
+
+        const view = new MapView({
+          map: map,
+          center: [-87.6298, 41.8781], // Longitude, latitude (Chicago)
+          zoom: 13, // Zoom level
+          container: "viewDiv" // Div element
+        });
+
+        view.when(function() {
+          const basemapGallery = new BasemapGallery({
+            view: view
+          });
+          view.ui.add(basemapGallery, {
+            position: "top-right"
+          });
+
+          // Add Locate widget
+          require(["esri/widgets/Locate"], function(Locate) {
+            const locateWidget = new Locate({
+              view: view
+            });
+            view.ui.add(locateWidget, {
+              position: "top-left"
+            });
+          });
+
+          // Add Search widget
+          require(["esri/widgets/Search"], function(Search) {
+            const searchWidget = new Search({
+              view: view
+            });
+            view.ui.add(searchWidget, {
+              position: "top-left"
+            });
+          });
+        });
       });
-      const view = new MapView({
-        map: map, // Map instance
-        center: [-97.7431, 30.2672], // Longitude, latitude
-        zoom: 13, // Zoom level
-        container: "viewDiv" // Div element
-
-      });
-
-
-      
-
-
-
-
- });  
-</script>
+    };
+  </script>
 
 
 
